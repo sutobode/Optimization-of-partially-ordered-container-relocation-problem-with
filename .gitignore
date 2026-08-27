@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Paper and extracted text are local source material, not project code.
+*.pdf
+paper_text.txt
+
+# Large/reconstructed datasets are documented but not committed.
+data_raw/
+data_gen/
+*.rar
+
+# Generated experiment artifacts.
+out_*.txt
+err_*.txt
+results_*.json
+repro_outputs/

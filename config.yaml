@@ -1,0 +1,55 @@
+paper:
+  title: "Optimization of partially ordered container relocation problem with rolled containers"
+  dataset_subsets: 39
+  instances_per_subset: 40
+  rc_proportions: [0.0, 0.1, 0.2, 0.3]
+
+models:
+  time_limit_seconds: 3600
+  # The paper reports Java but does not identify the solver or thread count.
+  workers: null
+
+greedy:
+  # Algorithm 1: TR uses min NBC, max DC, min BC; RR uses deadlock rule R1.
+  deadlock_in_target: true
+  deadlock_in_stack: true
+
+grasp:
+  # Values selected by the parameter study in Section 6.3.
+  max_iteration: 10
+  hood_num: 10
+  noimpr_limit: 3
+  deadlock_setting: B
+
+  # The paper names these parameters but does not publish experimental values.
+  # Null is intentional: a faithful run must receive explicit assumptions.
+  unpublished:
+    ma: null
+    mb: null
+    mc: null
+    initfit: null
+    alpha: null
+    initial_temp: null
+    final_temp: null
+    beta: null
+    boltzmann_k: null
+
+  # Compatibility assumptions used by the current Python implementation.
+  # These values are not claimed to be the authors' settings.
+  assumptions:
+    ma: 2
+    mb: 3
+    mc: 3
+    initfit: 1.0
+    alpha: 1.5
+    initial_temp: 2.0
+    final_temp: 0.01
+    beta: 0.9
+    boltzmann_k: 1.0
+
+statistics:
+  alpha: 0.05
+  strong_alpha: 0.01
+  normality_test: shapiro
+  normal_case_test: paired_t
+  nonnormal_case_test: wilcoxon_signed_rank
