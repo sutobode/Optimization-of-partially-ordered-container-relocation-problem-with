@@ -1,4 +1,5 @@
 from pocrp_rc.experiments.paper_coverage import (
+    NOT_EXPERIMENTAL_BENCHMARKS,
     PAPER_COVERAGE,
     REQUIRED_BENCHMARK_METHODS,
 )
@@ -23,3 +24,8 @@ def test_core_paper_sections_have_implementation_and_verification_entries():
         assert component.implementation
         assert component.verification
         assert component.status == "implemented"
+
+
+def test_non_benchmark_scope_is_explicit():
+    assert "Sections 6.1-6.6 benchmark" in NOT_EXPERIMENTAL_BENCHMARKS
+    assert "Tanaka" in NOT_EXPERIMENTAL_BENCHMARKS

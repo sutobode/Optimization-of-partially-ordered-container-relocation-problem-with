@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 
-from pocrp_rc.config import (grasp_config_with_assumptions, load_config,
+from pocrp_rc.config import (grasp_config_from_paper,
+                             grasp_config_with_assumptions, load_config,
                              paper_greedy_config)
 from pocrp_rc.core.instance import n_relocations
 from pocrp_rc.core.validator import validate
@@ -29,6 +31,9 @@ def main() -> int:
     parser.add_argument("--max-nodes", type=int, default=4_000_000)
     parser.add_argument("--config", default="config.yaml")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--strict-paper", action="store_true",
+        help="for GRASP, refuse unpublished parameter assumptions")
     args = parser.parse_args()
     ins = load_instance(args.instance)
     config = load_config(args.config)
@@ -40,7 +45,13 @@ def main() -> int:
         moves = construct(ins, paper_greedy_config(config))
         payload = {"algorithm": "greedy", "objective": validate(ins, moves)}
     elif args.algorithm == "grasp":
-        moves = grasp(ins, grasp_config_with_assumptions(config), seed=args.seed)
+        try:
+            cfg = (grasp_config_from_paper(config) if args.strict_paper
+                   else grasp_config_with_assumptions(config))
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+        moves = grasp(ins, cfg, seed=args.seed)
         payload = {"algorithm": "grasp", "objective": validate(ins, moves)}
     elif args.algorithm == "exact":
         objective, moves = solve_exact(ins, max_nodes=args.max_nodes)

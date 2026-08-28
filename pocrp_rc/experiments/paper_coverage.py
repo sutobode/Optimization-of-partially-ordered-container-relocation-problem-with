@@ -92,3 +92,9 @@ REQUIRED_BENCHMARK_METHODS = frozenset({
     "bnb",
 })
 
+
+NOT_EXPERIMENTAL_BENCHMARKS = (
+    "Section 2 surveys earlier CRP/POCRP work, but Sections 6.1-6.6 benchmark "
+    "only Random, AL, RL, Greedy, GRASP and a B&B framework similar to Tanaka "
+    "and Voss (2019)."
+)

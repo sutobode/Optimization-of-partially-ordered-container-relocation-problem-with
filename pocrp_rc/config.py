@@ -41,3 +41,45 @@ def grasp_config_with_assumptions(config: dict[str, Any]) -> GraspConfig:
         initial_temp=float(assumed["initial_temp"]),
         final_temp=float(assumed["final_temp"]), beta=float(assumed["beta"]),
         k=float(assumed["boltzmann_k"]))
+
+
+def grasp_config_from_paper(config: dict[str, Any]) -> GraspConfig:
+    """Build GRASP config from paper-published values only.
+
+    The paper publishes ``max-iteration = 10``, ``hood-num = 10`` and
+    ``NOIMPRLIMIT = 3`` after tuning. It names the remaining LNS parameters but
+    does not give numeric values, so strict paper mode refuses to fabricate a
+    runnable configuration when any required value is absent.
+    """
+    values = config["grasp"]
+    unpublished = values["unpublished"]
+    required = {
+        "ma": int,
+        "mb": int,
+        "mc": int,
+        "initfit": float,
+        "alpha": float,
+        "initial_temp": float,
+        "final_temp": float,
+        "beta": float,
+        "boltzmann_k": float,
+    }
+    missing = [name for name in required if unpublished.get(name) is None]
+    if missing:
+        joined = ", ".join(missing)
+        raise ValueError(
+            "cannot build a strict paper-faithful GRASP configuration; "
+            f"the paper does not publish: {joined}")
+    return GraspConfig(
+        max_iteration=int(values["max_iteration"]),
+        hood_num=int(values["hood_num"]),
+        noimpr_limit=int(values["noimpr_limit"]),
+        ma=int(unpublished["ma"]),
+        mb=int(unpublished["mb"]),
+        mc=int(unpublished["mc"]),
+        initfit=float(unpublished["initfit"]),
+        alpha=float(unpublished["alpha"]),
+        initial_temp=float(unpublished["initial_temp"]),
+        final_temp=float(unpublished["final_temp"]),
+        beta=float(unpublished["beta"]),
+        k=float(unpublished["boltzmann_k"]))

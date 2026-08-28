@@ -17,6 +17,18 @@ Solve one instance with the paper-faithful standalone Greedy configuration:
 python main.py "data_raw/ex195/每组前五个（195个）/Bay-3-6-3-10-8-2-0.pro" --algorithm greedy --json
 ```
 
+Run GRASP with an explicit distinction between runnable assumed parameters and
+strict paper-published parameters:
+
+```powershell
+python main.py "data_raw/ex195/每组前五个（195个）/Bay-3-6-3-10-8-2-0.pro" --algorithm grasp --json
+python main.py "data_raw/ex195/每组前五个（195个）/Bay-3-6-3-10-8-2-0.pro" --algorithm grasp --strict-paper
+```
+
+The second command intentionally fails unless the missing GRASP parameter
+values are supplied in `config.yaml`, because the paper names those parameters
+without publishing their numeric values.
+
 Run the Table 5/11 heuristic comparison:
 
 ```powershell

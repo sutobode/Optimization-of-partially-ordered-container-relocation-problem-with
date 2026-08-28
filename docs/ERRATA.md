@@ -24,6 +24,11 @@ The paper does not publish numerical values for `INITFIT`, `INITIALTEMP`,
 unpublished and separately lists compatibility assumptions. Results depending
 on those assumptions are not claimed to be exact author-code reproduction.
 
+The official dataset URL printed in the paper was checked. It provides the
+released `.rar` data archives but no author implementation or supplemental
+GRASP parameter file. For this reason `grasp_config_from_paper()` refuses to
+build a strict GRASP configuration unless those values are explicitly supplied.
+
 ## Printed formulation issues
 
 RL constraint (10) uses `c+r` where its semantics require artificial container
@@ -43,3 +48,11 @@ Section 6.5 says the B&B framework is similar to Tanaka and Voss (2019), but it
 does not publish complete node ordering, dominance, or implementation details.
 The Python B&B reproduces exactness, time limits, bounds and incumbent behavior;
 its runtime is not claimed to match the authors' Java implementation.
+
+## SOTA benchmark scope
+
+Section 2 surveys earlier CRP/POCRP literature, but the computational benchmark
+in Sections 6.1--6.6 compares only AL, RL, Random, Greedy, GRASP, and a B&B
+framework similar to Tanaka and Voss (2019). The other cited methods are not
+given POCRP-RC experimental inputs or results in this paper, so they are not
+implemented as benchmark baselines in this reproduction.
