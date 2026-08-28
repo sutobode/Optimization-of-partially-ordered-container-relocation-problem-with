@@ -23,6 +23,20 @@ Run the Table 5/11 heuristic comparison:
 .\reproduce.ps1 table5
 ```
 
+Run bounded AL/RL model checks for Tables 4 and 10. These defaults use the
+micro subset because the paper's full IP runs use a 3,600 s per-instance limit:
+
+```powershell
+.\reproduce.ps1 table4
+.\reproduce.ps1 table10
+```
+
+Run the bounded B&B comparison from Table 11:
+
+```powershell
+.\reproduce.ps1 table11
+```
+
 Run Table 12 using only released data:
 
 ```powershell
@@ -50,3 +64,7 @@ exact author settings.
 `pocrp_rc.exact.branch_and_bound` implements the time-limited iterative B&B
 framework of Section 6.5. The paper does not publish enough implementation
 detail to reproduce the authors' exact node ordering or Java runtime.
+
+Implemented benchmark methods from the paper are Random, Greedy, GRASP, AL,
+RL, and B&B. The coverage map in `pocrp_rc.experiments.paper_coverage` links
+paper sections to implementation modules and verification tests.
