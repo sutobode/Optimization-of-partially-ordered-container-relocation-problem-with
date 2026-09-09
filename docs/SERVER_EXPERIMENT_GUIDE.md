@@ -33,6 +33,14 @@ Run each command's `--dry-run` first when available, then archive raw JSON/CSV,
 logs, config snapshot, manifest and commit hash. Aggregate only after all jobs
 finish; timeout and invalid-solution records must remain visible.
 
+For a completed JSON record file, aggregate objective summaries and paired
+comparisons without rerunning solvers:
+
+```bash
+python -m pocrp_rc.evaluation.aggregate results/raw.json \
+  --baseline greedy --output results/summary.json
+```
+
 ## Claim gate
 
 Run the statistical aggregation and inspect `PUBLICATION_READINESS_REPORT.md`.
