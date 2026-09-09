@@ -20,7 +20,7 @@ def _records(path: Path) -> list[dict]:
 
 def _ci95(xs: list[float]) -> tuple[float, float]:
     if len(xs) < 2:
-        return (float("nan"), float("nan"))
+        return (None, None)
     mean = statistics.fmean(xs)
     se = statistics.stdev(xs) / math.sqrt(len(xs))
     return mean - 1.96 * se, mean + 1.96 * se
@@ -45,7 +45,16 @@ def aggregate(rows: list[dict], baseline: str | None = None) -> dict:
             keys = sorted(set(a) & set(b))
             if len(keys) >= 3:
                 p = paired_significance([a[k] for k in keys], [b[k] for k in keys])
-                out.setdefault("paired_vs_baseline", {})[method] = p.to_dict()
+                diffs = [a[k] - b[k] for k in keys]
+                sd = statistics.stdev(diffs) if len(diffs) > 1 else 0.0
+                wins = sum(x < 0 for x in diffs)
+                ties = sum(x == 0 for x in diffs)
+                losses = sum(x > 0 for x in diffs)
+                out.setdefault("paired_vs_baseline", {})[method] = {
+                    **p.to_dict(), "wins": wins, "ties": ties, "losses": losses,
+                    "relative_gap_percent": 100.0 * p.mean_difference / statistics.fmean([b[k] for k in keys]) if statistics.fmean([b[k] for k in keys]) else None,
+                    "cohens_dz": p.mean_difference / sd if sd else (0.0 if p.mean_difference == 0 else None),
+                }
     return out
 
 
