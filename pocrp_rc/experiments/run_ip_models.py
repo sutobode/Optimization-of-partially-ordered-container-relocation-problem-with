@@ -52,6 +52,7 @@ def main() -> int:
     ap.add_argument("--al-max-constraints", type=int, default=2_000_000)
     ap.add_argument("--json-out", default=None)
     ap.add_argument("--dry-run", action="store_true", help="list workload without solving")
+    ap.add_argument("--resume", action="store_true", help="skip instances already present in --json-out")
     args = ap.parse_args()
 
     models = [x.strip().lower() for x in args.models.split(",") if x.strip()]
@@ -70,6 +71,14 @@ def main() -> int:
         return 0
 
     rows = []
+    completed: set[str] = set()
+    if args.resume and args.json_out and os.path.exists(args.json_out):
+        with open(args.json_out, encoding="utf-8") as fh:
+            previous = json.load(fh)
+        if not isinstance(previous, list):
+            raise SystemExit("--resume requires --json-out containing a JSON list")
+        rows.extend(previous)
+        completed = {str(r.get("instance")) for r in previous if isinstance(r, dict)}
     grouped: dict[tuple[int, int], dict[str, list[float]]] = defaultdict(
         lambda: defaultdict(list))
     solved: dict[tuple[int, int], dict[str, int]] = defaultdict(
@@ -78,6 +87,8 @@ def main() -> int:
 
     for path in _files(args.root):
         ins = load_instance(path)
+        if args.resume and ins.name in completed:
+            continue
         if ins.C > args.max_c:
             continue
         key = (ins.C, ins.S)
