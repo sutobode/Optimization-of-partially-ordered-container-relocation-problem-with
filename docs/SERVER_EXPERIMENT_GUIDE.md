@@ -29,6 +29,13 @@ python -m pocrp_rc.experiments.run_table11 --help
 python -m pocrp_rc.experiments.run_rc_proportions --help
 ```
 
+Model runs can be resumed after interruption by reusing the same output file:
+
+```bash
+python -m pocrp_rc.experiments.run_ip_models --root data_raw \
+  --models rl --json-out results/rl.json --resume
+```
+
 Run each command's `--dry-run` first when available, then archive raw JSON/CSV,
 logs, config snapshot, manifest and commit hash. Aggregate only after all jobs
 finish; timeout and invalid-solution records must remain visible.
