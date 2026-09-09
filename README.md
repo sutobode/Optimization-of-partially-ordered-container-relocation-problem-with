@@ -50,10 +50,14 @@ If you use this reproduction code, cite the original paper listed in
 ## Dataset status
 
 The paper uses 39 subsets x 40 instances = 1,560 instances, based on the
-Jovanovic et al. (2019) dataset. The repository contains 1,560 raw instances
-for 0%, 10%, and 30% RC, the 195 released 20% RC instances (five per subset),
-and a separate generated 20% RC set with 1,560 instances. The generated set is
-kept separate and is not presented as the authors' original data.
+Jovanovic et al. (2019) dataset. The large/raw datasets are intentionally not
+committed to this Git repository; obtain the released archives from the
+authors' [dataset repository](https://github.com/vanDarkyang/Dataset-of-POCRP-RC)
+and extract them into the paths shown in `config.yaml`. The verification scripts
+report exactly which files are present and fail clearly when a dataset is
+missing. The released 20% archive contains 195 instances (five per subset).
+The separate generated 20% set has 1,560 instances and is never presented as
+the authors' original data.
 
 Solve one instance with the paper-faithful standalone Greedy configuration:
 
