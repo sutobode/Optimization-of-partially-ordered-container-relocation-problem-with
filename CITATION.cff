@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this reproduction code, please cite the original paper."
+title: "Optimization of partially ordered container relocation problem with rolled containers"
+authors:
+  - family-names: Wang
+    given-names: Ning
+  - family-names: Ma
+    given-names: Xinyu
+  - family-names: Yang
+    given-names: Ruobing
+  - family-names: Hu
+    given-names: Jingjing
+year: 2026
+journal: "Computers & Operations Research"
+volume: "191"
+doi: "10.1016/j.cor.2026.107434"
+url: "https://doi.org/10.1016/j.cor.2026.107434"

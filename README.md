@@ -11,6 +11,50 @@ python -m pip install -r requirements.txt
 .\reproduce.ps1 test
 ```
 
+Run the complete deterministic verification gate (tests, dataset
+reconstruction, Table 10 exact optima, and heuristic validity) with one
+command:
+
+```powershell
+.\verify.ps1
+```
+
+Run the additional RL and AL model checks when a longer solver run is
+acceptable:
+
+```powershell
+.\verify.ps1 -Models
+```
+
+The equivalent cross-platform command is `python verify.py`; both commands
+return a non-zero exit code if any selected check fails.
+
+Before a full run, use the fast end-to-end smoke test on the smallest instance:
+
+```powershell
+.\verify.ps1 -Smoke
+```
+
+The smoke test exercises the CLI algorithms on the smallest benchmark case;
+the AL formulation is checked separately on tiny cases by `python verify.py
+--models`.
+
+For the complete dataset inventory, verification scope, expected evidence, and
+paper-reproduction limits, read [docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+## Citation
+
+If you use this reproduction code, cite the original paper listed in
+`CITATION.cff`.
+
+## Dataset status
+
+The paper uses 39 subsets x 40 instances = 1,560 instances, based on the
+Jovanovic et al. (2019) dataset. The repository contains 1,560 raw instances
+for 0%, 10%, and 30% RC, the 195 released 20% RC instances (five per subset),
+and a separate generated 20% RC set with 1,560 instances. The generated set is
+kept separate and is not presented as the authors' original data.
+
 Solve one instance with the paper-faithful standalone Greedy configuration:
 
 ```powershell
