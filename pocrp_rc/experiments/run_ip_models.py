@@ -51,12 +51,23 @@ def main() -> int:
     ap.add_argument("--limit-per-subset", type=int, default=10 ** 9)
     ap.add_argument("--al-max-constraints", type=int, default=2_000_000)
     ap.add_argument("--json-out", default=None)
+    ap.add_argument("--dry-run", action="store_true", help="list workload without solving")
     args = ap.parse_args()
 
     models = [x.strip().lower() for x in args.models.split(",") if x.strip()]
     invalid = set(models) - {"al", "rl"}
     if invalid:
         raise SystemExit(f"unknown model(s): {sorted(invalid)}")
+    if args.dry_run:
+        files = _files(args.root)
+        selected = [p for p in files if (load_instance(p).C <= args.max_c)]
+        jobs = len(selected) * len(models)
+        if args.include_heuristics:
+            jobs += 2 * len(selected)
+        print(json.dumps({"root": args.root, "files_found": len(files),
+                          "selected_files": len(selected), "models": models,
+                          "estimated_jobs": jobs, "time_limit_seconds": args.time_limit}, indent=2))
+        return 0
 
     rows = []
     grouped: dict[tuple[int, int], dict[str, list[float]]] = defaultdict(

@@ -62,6 +62,7 @@ def main() -> int:
                     choices=["paper", "A", "B", "C"],
                     help="Greedy configuration; 'paper' follows Algorithm 1")
     ap.add_argument("--json-out", default=None)
+    ap.add_argument("--dry-run", action="store_true", help="list workload without solving")
     ap.add_argument("--grasp-iterations", type=int, default=10)
     ap.add_argument("--grasp-hood", type=int, default=10)
     args = ap.parse_args()
@@ -75,6 +76,12 @@ def main() -> int:
         grasp_fn = (grasp, gcfg)
 
     files = sorted(glob.glob(os.path.join(args.root, "*.pro")))
+    if args.dry_run:
+        selected = [p for p in files if load_instance(p).C <= args.max_c]
+        print(json.dumps({"root": args.root, "files_found": len(files),
+                          "selected_files": len(selected), "algorithms": algos,
+                          "estimated_jobs": len(selected) * len(algos)}, indent=2))
+        return 0
     per_subset: dict[tuple[int, int], dict[str, list]] = defaultdict(
         lambda: defaultdict(list))
     seen = defaultdict(int)
